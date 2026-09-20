@@ -1,0 +1,76 @@
+digraph estrella {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.4, nodesep=0.55, ranksep=1.3, splines=true, label="Modelo estrella - Capa Oro (Olist e-commerce)", labelloc=t, fontsize=20];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [color="#555555", arrowsize=0.8, fontname="Helvetica", fontsize=9];
+
+  dim_fecha [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF3FB">
+      <TR><TD BGCOLOR="#2E6DA4"><FONT COLOR="white"><B>dim_fecha</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> fecha_key (yyyymmdd)</TD></TR>
+      <TR><TD ALIGN="LEFT">fecha, anio, trimestre, mes<BR ALIGN="LEFT"/>nombre_mes, anio_mes, dia<BR ALIGN="LEFT"/>dia_semana, nombre_dia<BR ALIGN="LEFT"/>es_fin_de_semana<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  dim_cliente [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF3FB">
+      <TR><TD BGCOLOR="#2E6DA4"><FONT COLOR="white"><B>dim_cliente</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> cliente_key</TD></TR>
+      <TR><TD ALIGN="LEFT">customer_unique_id<BR ALIGN="LEFT"/>ciudad, estado, region<BR ALIGN="LEFT"/>zip_code_prefix, latitud, longitud<BR ALIGN="LEFT"/>primera_compra, ultima_compra<BR ALIGN="LEFT"/>total_pedidos, tipo_cliente<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  dim_producto [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF3FB">
+      <TR><TD BGCOLOR="#2E6DA4"><FONT COLOR="white"><B>dim_producto</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> producto_key</TD></TR>
+      <TR><TD ALIGN="LEFT">product_id<BR ALIGN="LEFT"/>categoria_pt, categoria_en<BR ALIGN="LEFT"/>fotos_qty, peso_g<BR ALIGN="LEFT"/>largo_cm, alto_cm, ancho_cm<BR ALIGN="LEFT"/>volumen_cm3, rango_peso<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  dim_vendedor [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF3FB">
+      <TR><TD BGCOLOR="#2E6DA4"><FONT COLOR="white"><B>dim_vendedor</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> vendedor_key</TD></TR>
+      <TR><TD ALIGN="LEFT">seller_id<BR ALIGN="LEFT"/>ciudad, estado, region<BR ALIGN="LEFT"/>zip_code_prefix<BR ALIGN="LEFT"/>latitud, longitud<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  dim_tipo_pago [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF3FB">
+      <TR><TD BGCOLOR="#2E6DA4"><FONT COLOR="white"><B>dim_tipo_pago</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> tipo_pago_key</TD></TR>
+      <TR><TD ALIGN="LEFT">payment_type<BR ALIGN="LEFT"/>descripcion<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  fact_ventas [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FDF1E3">
+      <TR><TD BGCOLOR="#D9822B"><FONT COLOR="white"><B>fact_ventas</B>  (1 fila = 1 ítem de pedido)</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> venta_key</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> fecha_compra_key<BR ALIGN="LEFT"/><B>FK</B> fecha_entrega_estimada_key<BR ALIGN="LEFT"/><B>FK</B> fecha_entrega_real_key<BR ALIGN="LEFT"/><B>FK</B> cliente_key<BR ALIGN="LEFT"/><B>FK</B> producto_key<BR ALIGN="LEFT"/><B>FK</B> vendedor_key<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">order_id, order_item_id, estado_pedido<BR ALIGN="LEFT"/><I>precio, flete, total_item</I><BR ALIGN="LEFT"/><I>dias_entrega_real, dias_entrega_estimada</I><BR ALIGN="LEFT"/><I>dias_retraso, entregado_a_tiempo</I><BR ALIGN="LEFT"/><I>es_venta_valida</I><BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  fact_pagos [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FDF1E3">
+      <TR><TD BGCOLOR="#D9822B"><FONT COLOR="white"><B>fact_pagos</B>  (1 fila = 1 pago)</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> pago_key</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> fecha_compra_key<BR ALIGN="LEFT"/><B>FK</B> cliente_key<BR ALIGN="LEFT"/><B>FK</B> tipo_pago_key<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">order_id, payment_sequential<BR ALIGN="LEFT"/><I>cuotas, valor_pago</I><BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  fact_resenas [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FDF1E3">
+      <TR><TD BGCOLOR="#D9822B"><FONT COLOR="white"><B>fact_resenas</B>  (1 fila = 1 reseña por pedido)</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><B>PK</B> resena_key</TD></TR>
+      <TR><TD ALIGN="LEFT"><B>FK</B> fecha_resena_key<BR ALIGN="LEFT"/><B>FK</B> cliente_key<BR ALIGN="LEFT"/></TD></TR>
+      <TR><TD ALIGN="LEFT">review_id, order_id<BR ALIGN="LEFT"/><I>review_score, tiene_comentario</I><BR ALIGN="LEFT"/><I>dias_respuesta</I><BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  fact_ventas  -> dim_fecha    [label="fecha_compra / estimada / real", dir=back, arrowtail=crow];
+  fact_ventas  -> dim_cliente  [dir=back, arrowtail=crow];
+  fact_ventas  -> dim_producto [dir=back, arrowtail=crow];
+  fact_ventas  -> dim_vendedor [dir=back, arrowtail=crow];
+  fact_pagos   -> dim_fecha    [dir=back, arrowtail=crow];
+  fact_pagos   -> dim_cliente  [dir=back, arrowtail=crow];
+  fact_pagos   -> dim_tipo_pago[dir=back, arrowtail=crow];
+  fact_resenas -> dim_fecha    [dir=back, arrowtail=crow];
+  fact_resenas -> dim_cliente  [dir=back, arrowtail=crow];
+
+  {rank=same; fact_ventas; fact_pagos; fact_resenas;}
+}

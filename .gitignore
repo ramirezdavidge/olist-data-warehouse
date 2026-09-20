@@ -1,0 +1,8 @@
+# Dataset (≈120 MB): se descarga de Kaggle, no se sube al repositorio
+data/raw/*
+!data/raw/.gitkeep
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+*.log
