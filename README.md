@@ -36,7 +36,7 @@ marketplaces del país. El dataset reúne información real y anonimizada de **u
 entre septiembre de 2016 y octubre de 2018**, y permite analizar cada pedido desde varias perspectivas: estado
 y tiempos de entrega, precio y flete, medio de pago, ubicación de clientes y vendedores, características del
 producto y opiniones de los clientes.
-
+![Modelo estrella](docs/DATASET2.PNG)
 Se distribuye como **9 archivos CSV relacionales** (un pedido puede tener varios ítems, varios pagos y una o más reseñas):
 
 | Archivo CSV | Contenido | Filas |
@@ -61,15 +61,7 @@ acentos y coordenadas fuera de rango (ver [Reglas de calidad](#-reglas-de-calida
 
 ## 🏗 Arquitectura
 
-```
-  CSV (9 archivos)          BRONCE                PLATA                     ORO
-┌────────────────┐     ┌──────────────┐     ┌────────────────┐     ┌─────────────────────┐
-│ olist_*.csv    │ ──► │ copia cruda  │ ──► │ sin duplicados │ ──► │ modelo estrella     │ ──► Dashboard
-│ (fuente)       │BULK │ + fecha_carga│ SQL │ nulos tratados │ SQL │ hechos + dimensiones│
-└────────────────┘     └──────────────┘     │ tipos correctos│     │ reglas de negocio   │
-                                            └────────────────┘     └─────────────────────┘
-```
-
+![Modelo estrella](docs/ARQUITE.jpeg)
 | Capa | Esquema | Responsabilidad | Objetos |
 |---|---|---|---|
 | **Bronce** | `bronze` | Extrae de los CSV y guarda **sin modificar** (todo como texto). Agrega `fecha_carga` (fecha y hora) y `archivo_origen`. | 9 tablas + `usp_load_bronze` |
